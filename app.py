@@ -5,6 +5,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 
 from core import db
 from model import *
+from api import api
 
 
 def create_app():
@@ -13,17 +14,17 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app,db)
 
+    app.register_blueprint(api)
+
     return app
 
 
 
 if __name__ == "__main__":
-	app = create_app()
+    app = create_app()
 
-	@app.route("/")
-	def hello():
-		return "Hello World!"
+    app.debug = True
 
-	manager = Manager(app)
-	manager.add_command('db', MigrateCommand)
-	manager.run()
+    manager = Manager(app)
+    manager.add_command('db', MigrateCommand)
+    manager.run()
